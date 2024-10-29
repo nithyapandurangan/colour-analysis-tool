@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Banner() {
   return (
-    <div className="bg-gradient-to-r from-[#FFADF2] to-[#FF60E6] py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="bg-gradient-to-r from-[#FFADF2] to-[#FF60E6] py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden mt-10">
       <div className="absolute inset-0 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm"></div>
       <div className="max-w-7xl mx-auto text-center relative z-10">
         <h1 className="text-4xl sm:text-5xl md:text-6xl [font-family:'Inter-Bold',Helvetica] font-bold text-black mb-8 leading-tight">

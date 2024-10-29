@@ -19,9 +19,9 @@ export default function Navbar() {
             <a href="/about" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
               About Us
             </a>
-            <a href="/work" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
+            {/* <a href="/work" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
               How we work
-            </a>
+            </a> */}
             <a href="/team" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
               Our Team
             </a>
