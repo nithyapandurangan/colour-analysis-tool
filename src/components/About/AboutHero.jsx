@@ -1,45 +1,86 @@
-import { IoMdCheckboxOutline } from "react-icons/io";
-import HeroImages from "../About/HeroImages";
+import { motion } from 'framer-motion'
+import { CheckCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'  // Import Link from react-router-dom
+
+const FeatureItem = ({ children }) => (
+  <motion.div 
+    className='flex items-start space-x-4 mb-6'
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    viewport={{ once: true }}
+  >
+    <CheckCircle className='w-6 h-6 text-pink-600 flex-shrink-0 mt-1' />
+    <p className='text-base xl:text-lg'>{children}</p>
+  </motion.div>
+)
+
+const Button = ({ children, className, size }) => {
+  return (
+    <button 
+      className={`px-6 py-4 bg-p text-black border-2 border-p rounded-full hover:bg-white hover:text-pink-600 transition-colors duration-300 ${className} ${size === 'lg' ? 'text-lg' : ''}`}
+    >
+      {children}
+    </button>
+  )
+}
 
 const AboutHero = () => {
-    return (
-        <div id='hero' className='relative flex px-12 pt-10 h-screen'>
-            <div className='flex-1 relative flex flex-col items-start z-5'>
-                <h1 className='font-extrabold pb-8 py-8 text-6xl font-bold leading-tight text-left'>
-                    Unlock your <span className="text-pink-600">true colours</span> with our expert analysis – tailored to bring out the <span className="text-pink-600">best in you.</span>
-                </h1>
+  return (
+    <section id='hero' className='relative px-4 md:px-12 md:py-10 min-h-screen bg-white'>
+      <div className='max-w-7xl mx-auto'>
+        <motion.h1 
+          className='font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight text-left mb-12'
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Unlock your <span className="text-pink-600">true colours</span> <br className="hidden md:inline" />
+          with our expert analysis– tailored <br className="hidden md:inline" />
+          to bring out the <span className="text-pink-600">best in you.</span>
+        </motion.h1>
 
-                <div className='py-3 flex items-center justify-start z-10'>
-                    <IoMdCheckboxOutline size={50} className='mr-4 text-black' />
-                    <p className='text-base xl:text-lg text-left'>AI-Powered Precision: Using AI, the tool ensures accurate color analysis and improves <br /> over time by incorporating user feedback to refine colour palette recommendations.</p>
-                </div>
-                <div className='py-3 flex items-center justify-start z-10'>
-                    <IoMdCheckboxOutline size={50} className='mr-4 text-black' />
-                    <p className='text-base xl:text-lg text-left'>Personalized Seasonal Color Classification: The tool analyzes facial features such as <br /> skin tone, hair color, and eye color to determine your seasonal colour palette.</p>
-                </div>
-                <div className='py-3 flex items-center justify-start z-10'>
-                    <IoMdCheckboxOutline size={50} className='mr-4 text-black' />
-                    <p className='text-base xl:text-lg text-left'>Tailored Fashion and Cosmetic Recommendations: Based on the user's seasonal <br /> classification, the tool suggests clothing and cosmetic colors that harmonize <br /> with your natural features.</p>
-                </div>
-
-                <div className='pt-4 flex flex-col items-center md:items-start justify-start w-full'>
-                    <div className='w-full py-5 flex justify-start'>
-                        <p className='text-base md:text-lg lg:text-xl font-bold'>Our AI-Assisted Colour Analysis Tool is your perfect partner <br /> for your self-expression & style.​</p>
-                    </div>
-                    <div className='w-full py-2 flex flex-row justify-start'>
-                        <button className="mt-3 box-border items-center justify-center gap-3 px-8 py-3 bg-p border-2 border-pink-400 rounded-3xl  hover:bg-white hover:text-pink-600 hover:font-bold transition-colors duration-300">
-                            <div className="relative w-fit font-semibold text-black text-lg text-center leading-6 whitespace-nowrap">
-                                Try Our Tool!
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </div>  
-            <div className='max-2xl:hidden flex justify-center w-[50%] z-20 py-40'>
-                <HeroImages />
-            </div>
+        <div className='space-y-6'>
+          <FeatureItem>
+            AI-Powered Precision: Using AI, the tool ensures accurate color analysis and improves 
+            over time by <br /> incorporating user feedback to refine colour palette recommendations.
+          </FeatureItem>
+          <FeatureItem>
+            Personalized Seasonal Color Classification: The tool analyzes facial features such as 
+            skin tone,<br /> hair color, and eye color to determine your seasonal colour palette.
+          </FeatureItem>
+          <FeatureItem>
+            Tailored Fashion and Cosmetic Recommendations: Based on the user's seasonal 
+            classification, the <br />tool suggests clothing and cosmetic colors that harmonize 
+            with your natural features.
+          </FeatureItem>
         </div>
-    );
-};
 
-export default AboutHero;
+        <motion.div 
+          className='mt-12 space-y-6'
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <p className='text-lg md:text-xl lg:text-2xl font-bold'>
+            Our AI-Assisted Colour Analysis Tool is your perfect partner <br className="hidden md:inline" />
+            for your self-expression & style.​
+          </p>
+
+          {/* Wrap the button inside Link component */}
+          <Link to="/tool">  {/* Change '/tool' to your actual route if it's different */}
+            <Button 
+              className="mt-6"
+              size="lg"
+            >
+              <span className="text-lg font-semibold">Try Our Tool!</span>
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+export default AboutHero
