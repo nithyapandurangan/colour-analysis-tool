@@ -337,7 +337,7 @@ def main():
     # Create enhanced database
     print("Creating enhanced database...")
     # Assuming you have the EnhancedSeasonalColorDatabase class defined
-    db_creator = EnhancedSeasonalColorDatabase("/Users/nithyapandurangan/Desktop/colour-analysis-tool/flask/Dataset/Seasons")
+    db_creator = EnhancedSeasonalColorDatabase("/Users/nithyapandurangan/Library/Mobile Documents/com~apple~CloudDocs/Desktop/colour-analysis-tool/flask/Dataset/Seasons")
    
     # Process images and create features
     data = []

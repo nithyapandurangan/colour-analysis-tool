@@ -9,8 +9,8 @@ import requests
 from model1 import EnhancedSeasonalColorDatabase, ImprovedSeasonalColorModel
 
 # Define paths
-MODEL_PATH = '/Users/nithyapandurangan/Desktop/Colour-Analysis-Tool/flask/model/seasonal_color_model.joblib'
-IMAGE_DIR = '/Users/nithyapandurangan/Desktop/Colour-Analysis-Tool/flask/Dataset/Seasons'
+MODEL_PATH = '/Users/nithyapandurangan/Library/Mobile Documents/com~apple~CloudDocs/Desktop/colour-analysis-tool/flask/seasonal_color_model.joblib'
+IMAGE_DIR = '/Users/nithyapandurangan/Library/Mobile Documents/com~apple~CloudDocs/Desktop/colour-analysis-tool/flask/Dataset/Seasons'
 
 # Shopify store details
 shop_url = "https://suit-you-well.myshopify.com"
