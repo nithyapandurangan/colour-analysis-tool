@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2ab08211.css",
+    "main.js": "/static/js/main.96d01cdc.js",
+    "static/js/453.6657ba7c.chunk.js": "/static/js/453.6657ba7c.chunk.js",
+    "static/media/haircolour.png": "/static/media/haircolour.51f1438d62f44685a5e8.png",
+    "static/media/niths.jpeg": "/static/media/niths.577834a42a69c34b9c11.jpeg",
+    "static/media/sudi.jpeg": "/static/media/sudi.9049a94147ebfe0e8de8.jpeg",
+    "static/media/eyecolour1.png": "/static/media/eyecolour1.451159202b6c38eaee79.png",
+    "static/media/shri.jpeg": "/static/media/shri.f13bab31904dd50a63e7.jpeg",
+    "static/media/undertones.png": "/static/media/undertones.0689eabc78b2fdcc957a.png",
+    "static/media/trish.jpeg": "/static/media/trish.617d02f539b1d6ffc30d.jpeg",
+    "static/media/hands_2.png": "/static/media/hands_2.6b3152433d7ce809d52e.png",
+    "static/media/colourwheel.jpeg": "/static/media/colourwheel.de194a2468045b5fcae5.jpeg",
+    "static/media/image.png": "/static/media/image.6c95283170122ef2eb33.png",
+    "static/media/skincolour.png": "/static/media/skincolour.c6e183c8d379a5799bcf.png",
+    "static/media/line.png": "/static/media/line.70ad03fe22c38a60e5ab.png",
+    "static/media/remove-bg-1.png": "/static/media/remove-bg-1.f6272fc96d637e9a407a.png",
+    "static/media/remove-bg-1-2.png": "/static/media/remove-bg-1-2.5a4e4b8a55a4c0972bc3.png",
+    "static/media/line.svg": "/static/media/line.a4687385a8ca9ca3bd7ff4c1c019b63a.svg",
+    "index.html": "/index.html",
+    "main.2ab08211.css.map": "/static/css/main.2ab08211.css.map",
+    "main.96d01cdc.js.map": "/static/js/main.96d01cdc.js.map",
+    "453.6657ba7c.chunk.js.map": "/static/js/453.6657ba7c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2ab08211.css",
+    "static/js/main.96d01cdc.js"
+  ]
+}
