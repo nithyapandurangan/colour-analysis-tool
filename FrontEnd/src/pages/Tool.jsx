@@ -130,7 +130,7 @@ const Tool = () => {
   const getPaletteImagePath = (season) => {
     if (!season) return null;
     const formattedSeason = season.toLowerCase().replace(/\s+/g, '_');
-    return `${process.env.PUBLIC_URL}/Palettes/${formattedSeason}_wc.png`;
+    return `${process.env.PUBLIC_URL}/Palettes/${formattedSeason}_wc.jpg`;
   };
 
   return (
@@ -184,7 +184,7 @@ const Tool = () => {
                 alt={`${result} Colour Palette`}
                 className="w-72 h-auto rounded-lg shadow-lg"
                 onError={(e) => {
-                  e.target.src = `${process.env.PUBLIC_URL}/Palettes/dark_autumn_wc.png`;
+                  e.target.src = `${process.env.PUBLIC_URL}/Palettes/dark_autumn_wc.jpg`;
                 }}
               />
             </div>
