@@ -14,12 +14,11 @@ IMAGE_DIR = '/Users/nithyapandurangan/Library/Mobile Documents/com~apple~CloudDo
 
 # Shopify store details
 shop_url = "https://suit-you-well.myshopify.com"
-access_token = os.getenv("SHOPIFY_ACCESS_TOKEN") #add your own shopify token to this to fetch data from shopify
-
+access_token = "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" #add your own shopify token to this to fetch data from shopify
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load pre-trained model
 try:
@@ -78,6 +77,7 @@ def predict():
         # Make prediction using the trained model
         prediction = model.predict(feature_values)
         predicted_season = prediction[0]
+        print(f"Predicted season: {predicted_season}") 
         
         # Remove temporary image
         if os.path.exists(temp_image_path):
