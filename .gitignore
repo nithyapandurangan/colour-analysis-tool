@@ -1,0 +1,18 @@
+# Node modules
+/node_modules/
+
+# Logs
+*.log
+
+# Dependency directories
+/node_modules/
+/FrontEnd/node_modules/
+
+# Environment files
+.env
+
+# Cache files
+.cache/
+
+# OS-specific files
+.DS_Store
