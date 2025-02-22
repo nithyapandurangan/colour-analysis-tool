@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import WebcamCapture from '../components/Tool/WebcamCapture';
 import ImageUpload from '../components/Tool/ImageUpload';
 import ResultDisplay from '../components/Tool/ResultDisplay';
-import ProductRecommendations from '../components/Tool/ProductRecommendations';
 
 const Tool = () => {
   const [selectedImage, setSelectedImage] = useState(null);

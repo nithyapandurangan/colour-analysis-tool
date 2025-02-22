@@ -19,9 +19,9 @@ export default function Navbar() {
             <a href="/about" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
               About Us
             </a>
-            {/* <a href="/work" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
-              How we work
-            </a> */}
+            <a href="/SkinCare" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
+              Skin Care Recommendation
+            </a>
             <a href="/team" className="mx-6 text-lg font-normal text-black hover:text-pink-600 hover:font-bold">
               Our Team
             </a>
@@ -37,8 +37,6 @@ export default function Navbar() {
             </a>
           </div>
 
-
-          {/* //not optimized yet */}
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -72,8 +70,8 @@ export default function Navbar() {
           <a href="/about" className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-blue-600">
             About Us
           </a>
-          <a href="/how-we-work" className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-blue-600">
-            How we work
+          <a href="/SkinCare" className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-blue-600">
+            Skin Care Recommendation
           </a>
           <a href="/team" className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-blue-600">
             Our Team
