@@ -14,7 +14,7 @@ const WebcamCapture = ({ isWebcamOpen, captureImageFromWebcam, webcamRef }) => {
           />
           <button
             onClick={captureImageFromWebcam}
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-700"
+            className="mt-4 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-800"
           >
             Capture Photo
           </button>

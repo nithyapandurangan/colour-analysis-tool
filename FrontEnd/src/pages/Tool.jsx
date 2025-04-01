@@ -64,8 +64,8 @@ const Tool = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-8 flex flex-col items-center">
-      <h1 className="text-4xl font-extrabold text-black mb-8 text-center">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white p-8 flex flex-col items-center">
+      <h1 className="text-4xl font-extrabold text-pink-800 mb-8 mt-6 text-center">
         Our Colour Analysis Tool
       </h1>
 
@@ -110,7 +110,7 @@ const Tool = () => {
               <button
                 onClick={analyzeColor}
                 disabled={loading}
-                className="mt-4 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="mt-4 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? "Analyzing..." : "Analyze Colour"}
               </button>

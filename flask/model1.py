@@ -287,7 +287,7 @@ class ImprovedSeasonalColorModel:
         pipeline = Pipeline([
             ('scaler', self.scaler),
             ('pca', self.pca),
-            ('classifier', RandomForestClassifier(random_state=random_state))
+            ('classifier', RandomForestClassifier(class_weight='balanced', random_state=random_state))
         ])
 
         # Expanded parameter grid for more thorough search
@@ -297,7 +297,8 @@ class ImprovedSeasonalColorModel:
             'classifier__min_samples_split': [2, 5, 10],
             'classifier__min_samples_leaf': [1, 2, 4],
             'classifier__max_features': ['sqrt', 'log2', None],
-            'classifier__criterion': ['gini', 'entropy'] #Added criterion
+            'classifier__criterion': ['gini', 'entropy'],
+            'classifier__class_weight': ['balanced', 'balanced_subsample', None]
         }
 
         # Use RandomizedSearchCV for efficiency with larger parameter space
@@ -305,6 +306,22 @@ class ImprovedSeasonalColorModel:
         grid_search.fit(X_train, y_train)
 
         self.model = grid_search.best_estimator_
+
+        # Get feature names before PCA
+        feature_names = X_train.columns
+    
+        # Get feature importances from the best model
+        feature_importances = self.model.named_steps['classifier'].feature_importances_
+    
+        # Plot feature importance
+        plt.figure(figsize=(10, 6))
+        indices = np.argsort(feature_importances)[::-1]
+        plt.bar(range(len(indices)), feature_importances[indices], align="center")
+        plt.xticks(range(len(indices)), [feature_names[i] for i in indices], rotation=90)
+        plt.title("Feature Importances in Random Forest")
+        plt.tight_layout()
+        plt.show()
+
         # Evaluate
         y_pred = self.model.predict(X_test)
         
@@ -337,10 +354,11 @@ def main():
     # Create enhanced database
     print("Creating enhanced database...")
     # Assuming you have the EnhancedSeasonalColorDatabase class defined
-    db_creator = EnhancedSeasonalColorDatabase("/Users/nithyapandurangan/Library/Mobile Documents/com~apple~CloudDocs/Desktop/colour-analysis-tool/flask/Dataset/Seasons")
+    db_creator = EnhancedSeasonalColorDatabase("/Users/nithyapandurangan/Documents/colour-analysis-tool/flask/Dataset/Seasons")
    
     # Process images and create features
     data = []
+    print(f"Looking for directory: {db_creator.image_directory}")
     for image_file in os.listdir(db_creator.image_directory):
         if image_file.lower().endswith(('.png', '.jpg', '.jpeg')):
             season_match = re.match(r'([a-zA-Z_]+)_\d+', image_file)
@@ -354,7 +372,7 @@ def main():
                     features['season'] = season
                     data.append(features)
                     print(f"Processed {image_file}")
-    
+
     # Create and save database
     df = pd.DataFrame(data)
     df.to_csv('season_db.csv', index=False)
@@ -363,6 +381,7 @@ def main():
     # Train the model
     print("\nTraining the model...")
     model = ImprovedSeasonalColorModel('season_db.csv')
+    print(f"Looking for CSV at: {os.path.abspath('season_db.csv')}")
     model.train_model()
     print("\nModel training completed!")
 

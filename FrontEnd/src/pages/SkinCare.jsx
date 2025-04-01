@@ -1,186 +1,71 @@
-import React, { useState } from "react";
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/Card"
 
-const SkinCare = () => {
-  const [option, setOption] = useState(""); 
-  const [skinType, setSkinType] = useState("");
-  const [concern, setConcern] = useState("");
-  const [productType, setProductType] = useState("");
-  const [existingProduct, setExistingProduct] = useState("");
-  const [recommendations, setRecommendations] = useState([]); 
-  const [error, setError] = useState(""); 
+import FormOptions from "../components/Skincare/FormOptions"
+import NewForm from "../components/Skincare/NewForm"
+import ExistingForm from "../components/Skincare/ExistingForm"
+import RecommendationList from "../components/Skincare/RecommendationList"
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(""); 
-  
+export default function Skincare() {
+  const [option, setOption] = useState("")
+  const [recommendations, setRecommendations] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (formData) => {
+    setError("")
+    setIsLoading(true)
     try {
-      let response;
+      let url = ""
+  
       if (option === "new") {
-        response = await fetch(`http://127.0.0.1:5001/recommend?skin_type=${skinType.toLowerCase()}&concern=${concern.toLowerCase()}&product_type=${productType.toLowerCase()}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
+        // API for Start from Scratch (port 5001)
+        url = `http://127.0.0.1:5001/recommend?skin_type=${formData.skinType}&concern=${formData.concern}&product_type=${formData.productType}`
       } else if (option === "existing") {
-        response = await fetch(`http://127.0.0.1:5001/recommend?existing_product=${existingProduct}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
+        // API for Find Similar Products (new API on port 5002)
+        url = `http://127.0.0.1:5002/recommend?existing_product=${formData.existingProduct}`
       }
   
-      if (!response.ok) {
-        throw new Error(`Failed to fetch recommendations. Status: ${response.status}`);
-      }
+      const response = await fetch(url)
+      if (!response.ok) throw new Error("Failed to fetch recommendations")
   
-      const data = await response.json();
-      console.log("Recommendations:", data);
-  
-      if (Array.isArray(data) && data.length > 0) {
-        setRecommendations(data);
-      } else {
-        setRecommendations([]);
-        setError("No matching products found. Try adjusting your filters.");
-      }
+      const data = await response.json()
+      setRecommendations(data.length > 0 ? data : [])
+      if (data.length === 0) setError("No matching products found. Try adjusting your filters.")
     } catch (error) {
-      console.error("Error fetching recommendations:", error);
-      setError("Something went wrong while fetching recommendations.");
+      setError("Something went wrong while fetching recommendations.")
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
   
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Skin Care Recommendations</h2>
-
-      {/* Select Recommendation Type */}
-      <div className="mb-4">
-        <label className="block font-medium">How would you like recommendations?</label>
-        <div className="mt-2">
-          <label className="mr-4">
-            <input
-              type="radio"
-              value="new"
-              checked={option === "new"}
-              onChange={() => setOption("new")}
-              className="mr-2"
-            />
-            Start from Scratch
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="existing"
-              checked={option === "existing"}
-              onChange={() => setOption("existing")}
-              className="mr-2"
-            />
-            Based on Current Product
-          </label>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
+      <div className="container mx-auto py-12 px-4 max-w-6xl">
+      <div className="relative mb-12 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold text-pink-800 mb-2">Skin Care Recommender</h1>
+        <p className="text-black text-lg max-w-2xl mx-auto my-6">
+          Discover your perfect skincare product match with our personalized recommendation engine
+        </p>
       </div>
-
-      {/* Form Based on Selection */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {option === "new" && (
-          <>
-            <div>
-              <label className="block font-medium">Skin Type</label>
-              <select
-                value={skinType}
-                onChange={(e) => setSkinType(e.target.value)}
-                className="w-full border p-2 rounded"
-                required
-              >
-                <option value="">Select Skin Type</option>
-                <option value="oily">Oily</option>
-                <option value="dry">Dry</option>
-                <option value="combination">Combination</option>
-                <option value="sensitive">Sensitive</option>
-                <option value="normal">Normal</option>
-              </select>
+        <Card className="border-none shadow-2xl overflow-hidden bg-white rounded-2xl">
+          <CardHeader className="bg-gradient-to-r from-pink-600 to-pink-800 rounded-t-2xl py-8">
+            <div className="flex items-center justify-center mb-2">
+              <CardTitle className="text-3xl md:text-4xl font-bold text-white">🌸 Discover Your Skin's Match</CardTitle>
             </div>
-
-            <div>
-              <label className="block font-medium">Main Concern</label>
-              <select
-                value={concern}
-                onChange={(e) => setConcern(e.target.value)}
-                className="w-full border p-2 rounded"
-                required
-              >
-                <option value="">Select Concern</option>
-                <option value="acne">Acne</option>
-                <option value="wrinkles">Wrinkles</option>
-                <option value="hyperpigmentation">Hyperpigmentation</option>
-                <option value="dryness">Dryness</option>
-                <option value="sensitivity">Sensitivity</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-medium">Product Type</label>
-              <select
-                value={productType}
-                onChange={(e) => setProductType(e.target.value)}
-                className="w-full border p-2 rounded"
-                required
-              >
-                <option value="">Select Product Type</option>
-                <option value="moisturizer">Moisturizer</option>
-                <option value="serum">Serum</option>
-                <option value="cleanser">Face Wash</option>
-                <option value="sunscreen">Sunscreen</option>
-              </select>
-            </div>
-          </>
-        )}
-
-        {option === "existing" && (
-          <div>
-            <label className="block font-medium">Current Product Name</label>
-            <input
-              type="text"
-              value={existingProduct}
-              onChange={(e) => setExistingProduct(e.target.value)}
-              className="w-full border p-2 rounded"
-              placeholder="Enter product name"
-              required
-            />
-          </div>
-        )}
-
-        {/* Submit Button */}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Get Recommendations
-        </button>
-      </form>
-
-      {/* Display API Results */}
-      {error && <p className="text-red-600 mt-4">{error}</p>}
-
-      {recommendations.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold mb-4">Recommended Products:</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {recommendations.map((product, index) => (
-              <div key={index} className="border p-4 rounded-lg shadow-md">
-                <img
-                  src={product.picture_src}
-                  alt={product.product_name}
-                  className="w-full h-40 object-cover rounded"
-                />
-                <h4 className="text-lg font-medium mt-2">{product.product_name}</h4>
-                <p className="text-gray-700"><strong>Brand:</strong> {product.brand}</p>
-                <p className="text-gray-700"><strong>Type:</strong> {product.product_type}</p>
-                <p className="text-gray-700"><strong>Skin Type:</strong> {product.skintype}</p>
-                <p className="text-gray-700"><strong>Effect:</strong> {product.notable_effects}</p>
-                <p className="text-gray-900 font-semibold"><strong>Price:</strong> {product.price}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+            <CardDescription className="text-center text-pink-100 text-[16px] mt-5">
+              Let us help you find your perfect skincare routine
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-8 px-6 md:px-10">
+            <FormOptions option={option} setOption={setOption} />
+            {option === "new" && <NewForm handleSubmit={handleSubmit} />}
+            {option === "existing" && <ExistingForm handleSubmit={handleSubmit} />}
+            <RecommendationList recommendations={recommendations} isLoading={isLoading} error={error} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
-};
-
-export default SkinCare;
+  )
+}

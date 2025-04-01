@@ -53,7 +53,7 @@ const ProductRecommendations = ({ seasonTag }) => {
               {product.image_url && (
                 <img src={product.image_url} alt={product.title} className="w-full h-40 object-cover mb-4 rounded-lg" />
               )}
-              <a href={product.product_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+              <a href={product.product_url} target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:underline">
                 View Product
               </a>
             </div>

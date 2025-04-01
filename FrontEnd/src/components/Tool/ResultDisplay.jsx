@@ -11,7 +11,7 @@ const ResultDisplay = ({ result, showRecommendations, setShowRecommendations }) 
   return (
     <div className="flex flex-col items-center space-y-6 mt-2">
       <h2 className="text-2xl font-bold text-black">Your Predicted Season:</h2>
-      <p className="text-2xl font-semibold text-p">{result}</p>
+      <p className="text-2xl font-semibold text-pink-600">{result}</p>
       <div className="flex flex-col items-center">
         <h3 className="text-2xl font-bold mb-4">Your Seasonal Colour Palette:</h3>
         <img
@@ -27,7 +27,7 @@ const ResultDisplay = ({ result, showRecommendations, setShowRecommendations }) 
       {!showRecommendations && (
         <button
           onClick={() => setShowRecommendations(true)}
-          className="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors"
+          className="mt-4 px-6 py-2 bg-pink-600 hover:bg-pink-800 text-white rounded-lg font-semibold transition-colors"
         >
           View Recommended Products
         </button>
