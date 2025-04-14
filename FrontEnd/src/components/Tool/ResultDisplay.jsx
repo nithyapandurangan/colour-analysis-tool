@@ -1,37 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProductRecommendations from './ProductRecommendations';
+import ColourPalette from './ColourPalette';
 
 const ResultDisplay = ({ result, showRecommendations, setShowRecommendations }) => {
-  const getPaletteImagePath = (season) => {
-    if (!season) return null;
-    const formattedSeason = season.toLowerCase().replace(/\s+/g, '_');
-    return `${process.env.PUBLIC_URL}/Palettes/${formattedSeason}_wc.jpg`;
+  const formatSeasonName = (season) => {
+    return season.split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   return (
     <div className="flex flex-col items-center space-y-6 mt-2">
       <h2 className="text-2xl font-bold text-black">Your Predicted Season:</h2>
-      <p className="text-2xl font-semibold text-pink-600">{result}</p>
+      <p className="text-2xl font-semibold text-pink-600">{formatSeasonName(result)}</p>
+      
       <div className="flex flex-col items-center">
-        <h3 className="text-2xl font-bold mb-4">Your Seasonal Colour Palette:</h3>
-        <img
-          src={getPaletteImagePath(result)}
-          alt={`${result} Colour Palette`}
-          className="w-72 h-auto rounded-lg shadow-lg"
-          onError={(e) => {
-            e.target.src = `${process.env.PUBLIC_URL}/Palettes/dark_autumn_wc.jpg`;
-          }}
-        />
+        <h3 className="text-2xl font-bold">Your Seasonal Colour Palette:</h3>
+        <ColourPalette season={result} />
       </div>
-
-      {!showRecommendations && (
-        <button
-          onClick={() => setShowRecommendations(true)}
-          className="mt-4 px-6 py-2 bg-pink-600 hover:bg-pink-800 text-white rounded-lg font-semibold transition-colors"
-        >
-          View Recommended Products
-        </button>
-      )}
 
       {showRecommendations && <ProductRecommendations seasonTag={result} />}
     </div>

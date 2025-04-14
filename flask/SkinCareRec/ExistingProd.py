@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend communication
+CORS(app)  
 
 # Load the skincare data
 skincare_url = 'https://drive.google.com/uc?export=download&id=19LD3liEpL9ZRi77evf5cK-icR0w_qXCx'

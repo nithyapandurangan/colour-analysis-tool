@@ -58,6 +58,7 @@ scipy==1.14.1
 six==1.16.0
 sounddevice==0.5.1
 stack-data==0.6.3
+tensorflow=2.15.0
 threadpoolctl==3.5.0
 tornado==6.4.1
 traitlets==5.14.3

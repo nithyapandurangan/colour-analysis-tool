@@ -3,13 +3,14 @@ from flask_cors import CORS
 import joblib
 from PIL import Image
 import numpy as np
+import pandas as pd
 import io
 import os
 import requests
-from model1 import EnhancedSeasonalColorDatabase, ImprovedSeasonalColorModel
+from MainModel import EnhancedSeasonalColorDatabase, ImprovedSeasonalColorModel
 
 # Define paths
-MODEL_PATH = '/Users/nithyapandurangan/Documents/colour-analysis-tool/flask/seasonal_color_model.joblib'
+MODEL_PATH = '/Users/nithyapandurangan/Documents/colour-analysis-tool/flask/colour_model.joblib'
 IMAGE_DIR = '/Users/nithyapandurangan/Documents/colour-analysis-tool/flask/Dataset/Seasons'
 
 # Shopify store details
@@ -43,6 +44,17 @@ def process_image(image):
         print(f"Error processing image: {e}")
         return None
 
+# Helper function to format season names consistently
+def format_season_name(season):
+    """Format season name to match frontend expectations.
+    
+    Example: 'dark_winter' -> 'Dark Winter'
+    """
+    words = season.replace('_', ' ').split()
+    formatted = ' '.join(word.capitalize() for word in words)
+    print(f"Formatting season '{season}' to '{formatted}'")
+    return formatted
+
 @app.route('/', methods=['GET'])
 def home():
     return "Colour Analysis Tool API is Running!"
@@ -70,14 +82,49 @@ def predict():
         if not features:
             return jsonify({'error': 'No face detected or could not extract features'}), 400
         
+        # Add the same engineered features as during training
+        features['warm_cool_balance'] = (
+            features['skin_forehead_a'] - 0.5 * features['skin_forehead_b_lab']
+        )
+        features['autumn_dark_warmth'] = (
+            0.8 * features['skin_forehead_a'] +
+            0.6 * features['skin_forehead_l'] +
+            0.4 * features['contrast']
+        )
+        features['dark_season_indicator'] = (
+            -0.7 * features['skin_forehead_l'] +
+            -0.7 * features['hair_l'] +
+            0.3 * features['contrast']
+        )
+        features['winter_coolness_index'] = (
+            -0.6 * features['skin_forehead_a'] +
+            -0.6 * features['skin_left_cheek_a'] +
+            0.4 * features['winter_contrast_depth']
+        )
+        features['soft_season_indicator'] = (
+            -0.7 * features['contrast'] +
+            0.5 * features['autumn_mutedness'] +
+            -0.4 * features['v_variance']
+        )
+        features['winter_features'] = (
+            0.5 * features['hair_l'] +
+            0.3 * features['contrast'] +
+            0.2 * features['winter_coolness']
+        )
+
         # Convert features to the expected input format
         feature_cols = list(features.keys())
-        feature_values = np.array([features[col] for col in feature_cols]).reshape(1, -1)
+        feature_values = pd.DataFrame([features], columns=feature_cols)
         
         # Make prediction using the trained model
         prediction = model.predict(feature_values)
-        predicted_season = prediction[0]
-        print(f"Predicted season: {predicted_season}") 
+        raw_season = prediction[0]
+        
+        # Format the season name to match frontend expectations
+        predicted_season = format_season_name(raw_season)
+        
+        print(f"Raw predicted season: {raw_season}")
+        print(f"Formatted predicted season: {predicted_season}")
         
         # Remove temporary image
         if os.path.exists(temp_image_path):
@@ -92,43 +139,64 @@ def predict():
 # New Endpoint: Fetch product recommendations based on season
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
-    """API endpoint to fetch product recommendations for a given season."""
+    """Improved product recommendation endpoint with robust tag matching"""
     data = request.get_json()
     season_tag = data.get('season')
     
     if not season_tag:
         return jsonify({'error': 'Season tag is required'}), 400
 
-    # Construct the API endpoint to fetch products with the season tag
-    url = f"{shop_url}/admin/api/2024-01/products.json?tag={season_tag}"
+    # Generate all possible tag variations
+    formatted_tag = format_season_name(season_tag)  # "Dark Autumn"
+    tag_variations = {
+        'space': formatted_tag.lower(),          # "dark autumn"
+        'underscore': formatted_tag.replace(' ', '_').lower(),  # "dark_autumn"
+        'hyphen': formatted_tag.replace(' ', '-').lower()       # "dark-autumn"
+    }
+
     headers = {
         "X-Shopify-Access-Token": access_token,
         "Content-Type": "application/json",
     }
 
     try:
-        # Send the request to fetch products
-        response = requests.get(url, headers=headers)
+        # Fetch all products (we'll filter locally)
+        response = requests.get(f"{shop_url}/admin/api/2024-01/products.json", headers=headers)
+        response.raise_for_status()  # Raises exception for 4XX/5XX status
         
-        if response.status_code == 200:
-            products = response.json().get('products', [])
-            filtered_products = [
-                {
+        products = response.json().get('products', [])
+        matched_products = []
+        
+        for product in products:
+            product_tags = product.get('tags', '').lower()
+            
+            # Check if any variation matches
+            if any(variation in product_tags for variation in tag_variations.values()):
+                matched_products.append({
                     'title': product['title'],
                     'tags': product['tags'],
-                    'image_url': product['images'][0]['src'] if product['images'] else None,
+                    'image_url': product['images'][0]['src'] if product.get('images') else None,
                     'product_url': f"{shop_url}/products/{product['handle']}"
-                }
-                for product in products if season_tag in product['tags']
-            ]
-            
-            return jsonify({'recommended_products': filtered_products}), 200
-        else:
-            return jsonify({'error': f"Failed to fetch products, status code: {response.status_code}"}), 500
+                })
 
+        return jsonify({
+            'recommended_products': matched_products,
+            'meta': {
+                'searched_tag': formatted_tag,
+                'matched_variations': list(tag_variations.values()),
+                'product_count': len(matched_products)
+            }
+        })
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"Shopify API error: {str(e)}")
+        return jsonify({
+            'error': 'Failed to fetch products from Shopify',
+            'details': str(e)
+        }), 500
     except Exception as e:
-        app.logger.error(f"Error fetching recommendations: {e}")
-        return jsonify({'error': str(e)}), 500
-
+        app.logger.error(f"Unexpected error: {str(e)}")
+        return jsonify({'error': 'An unexpected error occurred'}), 500
+        
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
