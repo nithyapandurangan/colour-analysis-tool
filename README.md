@@ -2,6 +2,8 @@
 
 The Colour Analysis Tool is an AI-powered platform that provides personalized colour recommendations based on a user's facial features such as skin tone, hair colour, and eye colour. The tool classifies users into seasonal colour categories and suggests clothing and accessories that complement their unique features. It is designed to help individuals discover their ideal colour palette and elevate their style.
 
+[ColourAnalysisTool.pptx](https://github.com/user-attachments/files/21369368/P029_Review.pptx)
+
 ## Features
 
 - **AI-Powered colour Analysis:** The tool uses advanced AI algorithms to analyze the user's facial features and provide accurate colour recommendations. It improves over time by incorporating user feedback.
